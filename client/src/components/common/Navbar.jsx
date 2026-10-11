@@ -1,224 +1,256 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Layers, User, LogOut, Menu, X, ShieldAlert, CheckCircle, ChevronDown } from 'lucide-react';
+import { Layers, LogOut, Menu, X, User, Shield, Briefcase, GraduationCap } from 'lucide-react';
 import Button from './Button';
 
 export default function Navbar() {
-  const { user, role, logout, switchPreviewRole } = useAuth();
+  const { user, role, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [roleMenuOpen, setRoleMenuOpen] = useState(false);
 
   const isActive = (path) => location.pathname === path;
 
-  const handleRoleSwitch = (newRole) => {
-    switchPreviewRole(newRole);
-    setRoleMenuOpen(false);
-    if (newRole === 'student') navigate('/student');
-    else if (newRole === 'staff') navigate('/staff');
-    else if (newRole === 'admin') navigate('/admin');
+  const handleLogout = async () => {
+    await logout();
+    navigate('/');
   };
 
   return (
     <header style={{
-      background: '#ffffff',
-      borderBottom: '1px solid var(--navy-200)',
+      background: 'rgba(8, 12, 22, 0.88)',
+      backdropFilter: 'blur(16px)',
+      WebkitBackdropFilter: 'blur(16px)',
+      borderBottom: '2px solid rgba(255, 255, 255, 0.08)',
       position: 'sticky',
       top: 0,
-      zIndex: 100,
-      boxShadow: 'var(--shadow-sm)'
+      zIndex: 100
     }}>
-      <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '70px' }}>
+      <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '72px' }}>
         {/* Brand */}
         <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', textDecoration: 'none' }}>
           <div style={{
-            background: 'linear-gradient(135deg, var(--primary-700), var(--primary-900))',
+            background: 'linear-gradient(135deg, var(--accent-purple), #9333ea)',
             color: '#ffffff',
             width: '38px',
             height: '38px',
-            borderRadius: '10px',
+            borderRadius: 'var(--radius-sm)',
+            border: '2px solid #a855f7',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 2px 6px rgba(67, 56, 202, 0.35)'
+            boxShadow: 'var(--shadow-brutal-sm)'
           }}>
             <Layers size={22} />
           </div>
           <div>
-            <span style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--navy-950)', letterSpacing: '-0.02em' }}>
-              Queue<span style={{ color: 'var(--primary-600)' }}>Less</span>
+            <span style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
+              Queue<span style={{ color: 'var(--accent-cyan)' }}>Less</span>
             </span>
-            <span style={{ display: 'block', fontSize: '0.68rem', color: 'var(--navy-600)', fontWeight: 600, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+            <span style={{ display: 'block', fontSize: '0.68rem', color: 'var(--text-muted)', fontWeight: 600, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
               Campus Queue System
             </span>
           </div>
         </Link>
 
-        {/* Desktop Navigation */}
-        <nav style={{ display: 'none', gap: '1.5rem', alignItems: 'center' }} className="desktop-nav">
-          <Link
-            to="/"
-            style={{
-              fontWeight: 600,
-              fontSize: '0.925rem',
-              color: isActive('/') ? 'var(--primary-700)' : 'var(--navy-700)',
-              borderBottom: isActive('/') ? '2px solid var(--primary-700)' : '2px solid transparent',
-              padding: '0.5rem 0'
-            }}
-          >
-            Services
-          </Link>
-          <Link
-            to="/student"
-            style={{
-              fontWeight: 600,
-              fontSize: '0.925rem',
-              color: isActive('/student') ? 'var(--primary-700)' : 'var(--navy-700)',
-              borderBottom: isActive('/student') ? '2px solid var(--primary-700)' : '2px solid transparent',
-              padding: '0.5rem 0'
-            }}
-          >
-            Student Dashboard
-          </Link>
-          <Link
-            to="/staff"
-            style={{
-              fontWeight: 600,
-              fontSize: '0.925rem',
-              color: isActive('/staff') ? 'var(--primary-700)' : 'var(--navy-700)',
-              borderBottom: isActive('/staff') ? '2px solid var(--primary-700)' : '2px solid transparent',
-              padding: '0.5rem 0'
-            }}
-          >
-            Staff Console
-          </Link>
-          <Link
-            to="/admin"
-            style={{
-              fontWeight: 600,
-              fontSize: '0.925rem',
-              color: isActive('/admin') ? 'var(--primary-700)' : 'var(--navy-700)',
-              borderBottom: isActive('/admin') ? '2px solid var(--primary-700)' : '2px solid transparent',
-              padding: '0.5rem 0'
-            }}
-          >
-            Admin Dashboard
-          </Link>
-          <Link
-            to="/history"
-            style={{
-              fontWeight: 600,
-              fontSize: '0.925rem',
-              color: isActive('/history') ? 'var(--primary-700)' : 'var(--navy-700)',
-              borderBottom: isActive('/history') ? '2px solid var(--primary-700)' : '2px solid transparent',
-              padding: '0.5rem 0'
-            }}
-          >
-            History
-          </Link>
+        {/* Desktop Role-Based Navigation */}
+        <nav style={{ display: 'none', gap: '1.75rem', alignItems: 'center' }} className="desktop-nav">
+          {/* Public / Guest Links */}
+          {!user && (
+            <>
+              <Link
+                to="/"
+                style={{
+                  fontWeight: 600,
+                  fontSize: '0.925rem',
+                  color: isActive('/') ? 'var(--accent-cyan)' : 'var(--text-secondary)'
+                }}
+              >
+                Home
+              </Link>
+              <a
+                href="#services-preview"
+                style={{
+                  fontWeight: 600,
+                  fontSize: '0.925rem',
+                  color: 'var(--text-secondary)'
+                }}
+              >
+                Services
+              </a>
+            </>
+          )}
+
+          {/* Student Links */}
+          {user && role === 'student' && (
+            <>
+              <Link
+                to="/"
+                style={{
+                  fontWeight: 600,
+                  fontSize: '0.925rem',
+                  color: isActive('/') ? 'var(--accent-cyan)' : 'var(--text-secondary)'
+                }}
+              >
+                Home
+              </Link>
+              <Link
+                to="/student/services"
+                style={{
+                  fontWeight: 600,
+                  fontSize: '0.925rem',
+                  color: isActive('/student/services') ? 'var(--accent-cyan)' : 'var(--text-secondary)'
+                }}
+              >
+                Services
+              </Link>
+              <Link
+                to="/student/dashboard"
+                style={{
+                  fontWeight: 600,
+                  fontSize: '0.925rem',
+                  color: isActive('/student/dashboard') ? 'var(--accent-cyan)' : 'var(--text-secondary)'
+                }}
+              >
+                My Active Token
+              </Link>
+              <Link
+                to="/student/history"
+                style={{
+                  fontWeight: 600,
+                  fontSize: '0.925rem',
+                  color: isActive('/student/history') ? 'var(--accent-cyan)' : 'var(--text-secondary)'
+                }}
+              >
+                My Tokens / History
+              </Link>
+            </>
+          )}
+
+          {/* Staff Links */}
+          {user && role === 'staff' && (
+            <>
+              <Link
+                to="/staff/dashboard"
+                style={{
+                  fontWeight: 600,
+                  fontSize: '0.925rem',
+                  color: isActive('/staff/dashboard') ? 'var(--accent-cyan)' : 'var(--text-secondary)'
+                }}
+              >
+                Assigned Counters
+              </Link>
+              <Link
+                to="/staff/dashboard"
+                style={{
+                  fontWeight: 600,
+                  fontSize: '0.925rem',
+                  color: 'var(--text-secondary)'
+                }}
+              >
+                Active Queue
+              </Link>
+            </>
+          )}
+
+          {/* Admin Links */}
+          {user && role === 'admin' && (
+            <>
+              <Link
+                to="/admin/dashboard"
+                style={{
+                  fontWeight: 600,
+                  fontSize: '0.925rem',
+                  color: isActive('/admin/dashboard') ? 'var(--accent-cyan)' : 'var(--text-secondary)'
+                }}
+              >
+                Overview
+              </Link>
+              <Link
+                to="/admin/dashboard"
+                style={{
+                  fontWeight: 600,
+                  fontSize: '0.925rem',
+                  color: 'var(--text-secondary)'
+                }}
+              >
+                Counter Management
+              </Link>
+              <Link
+                to="/admin/dashboard"
+                style={{
+                  fontWeight: 600,
+                  fontSize: '0.925rem',
+                  color: 'var(--text-secondary)'
+                }}
+              >
+                Staff Management
+              </Link>
+              <Link
+                to="/admin/history"
+                style={{
+                  fontWeight: 600,
+                  fontSize: '0.925rem',
+                  color: isActive('/admin/history') ? 'var(--accent-cyan)' : 'var(--text-secondary)'
+                }}
+              >
+                History & Analytics
+              </Link>
+            </>
+          )}
         </nav>
 
-        {/* Role Demo Switcher & User Profile */}
+        {/* Right Section: Auth State */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
-          {/* Interactive Role Switcher Pill */}
-          <div style={{ position: 'relative' }}>
-            <button
-              onClick={() => setRoleMenuOpen(!roleMenuOpen)}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.4rem',
-                padding: '0.35rem 0.75rem',
-                borderRadius: 'var(--radius-full)',
-                border: '1px solid var(--navy-300)',
-                background: 'var(--bg-subtle)',
-                fontSize: '0.8rem',
-                fontWeight: 600,
-                color: 'var(--navy-800)',
-                cursor: 'pointer'
-              }}
-              title="Preview another user role"
-            >
-              <span style={{ color: 'var(--navy-500)' }}>Role:</span>
-              <strong style={{ textTransform: 'capitalize', color: 'var(--primary-700)' }}>{role}</strong>
-              <ChevronDown size={14} />
-            </button>
-
-            {roleMenuOpen && (
-              <div style={{
-                position: 'absolute',
-                top: '110%',
-                right: 0,
-                background: '#ffffff',
-                border: '1px solid var(--navy-200)',
-                borderRadius: 'var(--radius-md)',
-                boxShadow: 'var(--shadow-lg)',
-                padding: '0.4rem',
-                minWidth: '150px',
-                zIndex: 200
-              }}>
-                <div style={{ padding: '0.4rem 0.6rem', fontSize: '0.75rem', color: 'var(--navy-500)', fontWeight: 700, textTransform: 'uppercase' }}>
-                  Preview Role
-                </div>
-                {['student', 'staff', 'admin'].map((r) => (
-                  <button
-                    key={r}
-                    onClick={() => handleRoleSwitch(r)}
-                    style={{
-                      width: '100%',
-                      textAlign: 'left',
-                      padding: '0.45rem 0.65rem',
-                      background: role === r ? 'var(--primary-50)' : 'transparent',
-                      color: role === r ? 'var(--primary-700)' : 'var(--navy-800)',
-                      border: 'none',
-                      borderRadius: 'var(--radius-sm)',
-                      fontWeight: role === r ? 700 : 500,
-                      fontSize: '0.85rem',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between'
-                    }}
-                  >
-                    <span style={{ textTransform: 'capitalize' }}>{r}</span>
-                    {role === r && <CheckCircle size={14} color="var(--primary-700)" />}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* User Status / Auth Actions */}
           {user ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
               <div style={{
                 display: 'none',
-                flexDirection: 'column',
-                alignItems: 'flex-end',
-                lineHeight: 1.2
+                alignItems: 'center',
+                gap: '0.5rem',
+                padding: '0.35rem 0.75rem',
+                borderRadius: 'var(--radius-sm)',
+                background: 'rgba(255, 255, 255, 0.05)',
+                border: '1px solid var(--border-glass)'
               }} className="user-info">
-                <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--navy-900)' }}>{user.full_name}</span>
-                <span style={{ fontSize: '0.725rem', color: 'var(--navy-500)', textTransform: 'capitalize' }}>{user.role}</span>
+                {role === 'admin' ? (
+                  <Shield size={16} color="var(--accent-purple)" />
+                ) : role === 'staff' ? (
+                  <Briefcase size={16} color="var(--accent-cyan)" />
+                ) : (
+                  <GraduationCap size={16} color="var(--color-success)" />
+                )}
+                <div>
+                  <div style={{ fontSize: '0.825rem', fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.1 }}>
+                    {user.full_name || user.email?.split('@')[0]}
+                  </div>
+                  <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'capitalize' }}>
+                    {role}
+                  </div>
+                </div>
               </div>
+
               <Button
                 variant="secondary"
                 size="sm"
                 icon={LogOut}
-                onClick={logout}
-                title="Log Out"
+                onClick={handleLogout}
               >
                 Logout
               </Button>
             </div>
           ) : (
-            <div style={{ display: 'flex', gap: '0.5rem' }}>
-              <Link to="/login">
-                <Button variant="secondary" size="sm">Login</Button>
+            <div style={{ display: 'flex', gap: '0.65rem', alignItems: 'center' }}>
+              <Link to="/auth/choose-role">
+                <Button variant="secondary" size="sm">
+                  Sign In
+                </Button>
               </Link>
-              <Link to="/register">
-                <Button variant="primary" size="sm">Register</Button>
+              <Link to="/auth/choose-role">
+                <Button variant="primary" size="sm">
+                  Get Started
+                </Button>
               </Link>
             </div>
           )}
@@ -233,7 +265,7 @@ export default function Navbar() {
               background: 'none',
               border: 'none',
               cursor: 'pointer',
-              color: 'var(--navy-800)',
+              color: 'var(--text-primary)',
               padding: '0.4rem'
             }}
             className="mobile-hamburger"
@@ -247,18 +279,48 @@ export default function Navbar() {
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
         <div style={{
-          background: '#ffffff',
-          borderTop: '1px solid var(--navy-200)',
-          padding: '1rem 1.25rem 1.5rem',
+          background: 'rgba(8, 12, 22, 0.98)',
+          borderTop: '1px solid var(--border-glass)',
+          padding: '1.25rem 1.5rem 1.75rem',
           display: 'flex',
           flexDirection: 'column',
-          gap: '0.85rem'
+          gap: '1rem'
         }}>
-          <Link to="/" onClick={() => setMobileMenuOpen(false)} style={{ padding: '0.5rem 0', fontWeight: 600 }}>Services</Link>
-          <Link to="/student" onClick={() => setMobileMenuOpen(false)} style={{ padding: '0.5rem 0', fontWeight: 600 }}>Student Dashboard</Link>
-          <Link to="/staff" onClick={() => setMobileMenuOpen(false)} style={{ padding: '0.5rem 0', fontWeight: 600 }}>Staff Console</Link>
-          <Link to="/admin" onClick={() => setMobileMenuOpen(false)} style={{ padding: '0.5rem 0', fontWeight: 600 }}>Admin Dashboard</Link>
-          <Link to="/history" onClick={() => setMobileMenuOpen(false)} style={{ padding: '0.5rem 0', fontWeight: 600 }}>History</Link>
+          {!user ? (
+            <>
+              <Link to="/" onClick={() => setMobileMenuOpen(false)} style={{ fontWeight: 600, color: 'var(--text-primary)' }}>Home</Link>
+              <Link to="/auth/choose-role" onClick={() => setMobileMenuOpen(false)} style={{ fontWeight: 600, color: 'var(--accent-cyan)' }}>Sign In / Role Selection</Link>
+              <Link to="/auth/choose-role" onClick={() => setMobileMenuOpen(false)}>
+                <Button variant="primary" size="sm" style={{ width: '100%' }}>Get Started</Button>
+              </Link>
+            </>
+          ) : (
+            <>
+              {role === 'student' && (
+                <>
+                  <Link to="/" onClick={() => setMobileMenuOpen(false)} style={{ fontWeight: 600 }}>Home</Link>
+                  <Link to="/student/services" onClick={() => setMobileMenuOpen(false)} style={{ fontWeight: 600 }}>Services</Link>
+                  <Link to="/student/dashboard" onClick={() => setMobileMenuOpen(false)} style={{ fontWeight: 600 }}>My Active Token</Link>
+                  <Link to="/student/history" onClick={() => setMobileMenuOpen(false)} style={{ fontWeight: 600 }}>My History</Link>
+                </>
+              )}
+              {role === 'staff' && (
+                <>
+                  <Link to="/staff/dashboard" onClick={() => setMobileMenuOpen(false)} style={{ fontWeight: 600 }}>Assigned Counters</Link>
+                  <Link to="/staff/dashboard" onClick={() => setMobileMenuOpen(false)} style={{ fontWeight: 600 }}>Active Queue</Link>
+                </>
+              )}
+              {role === 'admin' && (
+                <>
+                  <Link to="/admin/dashboard" onClick={() => setMobileMenuOpen(false)} style={{ fontWeight: 600 }}>Overview & Management</Link>
+                  <Link to="/admin/history" onClick={() => setMobileMenuOpen(false)} style={{ fontWeight: 600 }}>History & Analytics</Link>
+                </>
+              )}
+              <Button variant="secondary" size="sm" icon={LogOut} onClick={handleLogout} style={{ width: '100%' }}>
+                Logout ({user.full_name})
+              </Button>
+            </>
+          )}
         </div>
       )}
 

@@ -39,7 +39,7 @@ export const queueService = {
    * Fetch a single service by ID
    */
   async getServiceById(id) {
-    return services.find(s => s.id === id) || null;
+    return services.find(s => s.id === id || s.slug === id) || null;
   },
 
   /**
@@ -75,12 +75,12 @@ export const queueService = {
    */
   async joinQueue(serviceId, user) {
     await new Promise(r => setTimeout(r, 300));
-    const service = services.find(s => s.id === serviceId);
+    const service = services.find(s => s.id === serviceId || s.slug === serviceId);
     if (!service) throw new Error('Service not found.');
     if (!service.is_active) throw new Error('This counter is currently inactive.');
 
     // Check if user already holds active token for this service
-    const existing = tokens.find(t => t.service_id === serviceId && t.user_id === user.id && ['waiting', 'called', 'serving'].includes(t.status));
+    const existing = tokens.find(t => (t.service_id === service.id || t.service_id === service.slug) && t.user_id === user.id && ['waiting', 'called', 'serving'].includes(t.status));
     if (existing) throw new Error('You already hold an active token for this counter.');
 
     service.waiting_count += 1;

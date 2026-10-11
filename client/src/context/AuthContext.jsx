@@ -48,13 +48,8 @@ export function AuthProvider({ children }) {
     setUser(null);
   };
 
-  const switchPreviewRole = (role) => {
-    const updated = authService.setPreviewRole(role);
-    setUser(updated);
-  };
-
   return (
-    <AuthContext.Provider value={{ user, role: user?.role || 'guest', loading, login, register, logout, switchPreviewRole }}>
+    <AuthContext.Provider value={{ user, role: user?.role || 'guest', loading, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );

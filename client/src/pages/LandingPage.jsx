@@ -1,30 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useQueue } from '../context/QueueContext';
 import { useAuth } from '../context/AuthContext';
-import ServiceCard from '../components/student/ServiceCard';
-import { Layers, Clock, ShieldCheck, Zap, ArrowRight, CheckCircle2, UserCheck } from 'lucide-react';
+import { Layers, ArrowRight, Clock, Users, ArrowUpRight, CheckCircle2 } from 'lucide-react';
 import Button from '../components/common/Button';
+import Badge from '../components/common/Badge';
 
 export default function LandingPage() {
-  const { services, joinQueue, activeToken } = useQueue();
-  const { user } = useAuth();
+  const { services } = useQueue();
+  const { user, role } = useAuth();
   const navigate = useNavigate();
-  const [joiningId, setJoiningId] = useState(null);
 
-  const handleJoin = async (serviceId) => {
-    if (!user) {
-      navigate('/login');
-      return;
-    }
-    setJoiningId(serviceId);
-    try {
-      await joinQueue(serviceId);
-      navigate('/student');
-    } catch (err) {
-      alert(err.message);
-    } finally {
-      setJoiningId(null);
+  const handleServiceClick = (serviceId) => {
+    if (user && role === 'student') {
+      navigate(`/student/services/${serviceId}`);
+    } else {
+      navigate('/auth/choose-role');
     }
   };
 
@@ -32,43 +23,42 @@ export default function LandingPage() {
     <div>
       {/* Hero Section */}
       <section style={{
-        background: 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 60%, #312e81 100%)',
-        color: '#ffffff',
-        padding: '4.5rem 0 5rem',
+        padding: '5rem 0 5.5rem',
         position: 'relative',
         overflow: 'hidden'
       }}>
         <div className="container" style={{ position: 'relative', zIndex: 10 }}>
-          <div style={{ maxWidth: '780px', margin: '0 auto', textAlign: 'center' }}>
+          <div style={{ maxWidth: '820px', margin: '0 auto', textAlign: 'center' }}>
             <div style={{
               display: 'inline-flex',
               alignItems: 'center',
               gap: '0.5rem',
-              background: 'rgba(255, 255, 255, 0.1)',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              padding: '0.4rem 1rem',
+              background: 'rgba(124, 58, 237, 0.12)',
+              border: '1.5px solid rgba(168, 85, 247, 0.35)',
+              padding: '0.45rem 1.15rem',
               borderRadius: 'var(--radius-full)',
-              fontSize: '0.85rem',
-              fontWeight: 600,
-              color: '#e0e7ff',
-              marginBottom: '1.5rem',
-              backdropFilter: 'blur(4px)'
+              fontSize: '0.825rem',
+              fontWeight: 700,
+              color: '#c084fc',
+              marginBottom: '1.75rem',
+              letterSpacing: '0.04em',
+              textTransform: 'uppercase'
             }}>
-              <Zap size={16} color="#fbbf24" />
-              <span>Zero-Wait Smart Campus Experience</span>
+              <span className="pulse-dot" style={{ color: 'var(--accent-cyan)' }} />
+              <span>Campus Digital Queue System</span>
             </div>
 
             <h1 style={{
-              fontSize: '3.25rem',
+              fontSize: '3.5rem',
               fontWeight: 800,
-              color: '#ffffff',
-              lineHeight: 1.15,
+              color: 'var(--text-primary)',
+              lineHeight: 1.12,
               letterSpacing: '-0.03em',
-              marginBottom: '1.25rem'
+              marginBottom: '1.5rem'
             }}>
               Stop Waiting in Physical Lines. <br />
               <span style={{
-                background: 'linear-gradient(90deg, #818cf8, #38bdf8)',
+                background: 'linear-gradient(90deg, #c084fc 0%, var(--accent-cyan) 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent'
               }}>
@@ -77,105 +67,140 @@ export default function LandingPage() {
             </h1>
 
             <p style={{
-              fontSize: '1.15rem',
-              color: '#cbd5e1',
+              fontSize: '1.2rem',
+              color: 'var(--text-secondary)',
               lineHeight: 1.6,
-              maxWidth: '650px',
-              margin: '0 auto 2.25rem'
+              maxWidth: '680px',
+              margin: '0 auto 2.5rem'
             }}>
-              QueueLess eliminates physical congestion at college canteens, photocopy shops, and administrative offices. Get a digital token, track your live position from your phone, and arrive right when your number is called.
+              QueueLess eliminates physical congestion across campus canteens, photocopy shops, examination offices, and administrative desks. Request a digital token, monitor your queue position from your phone, and arrive precisely when your number is called.
             </p>
 
             <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '1rem' }}>
-              <Link to="/student">
-                <Button variant="primary" size="lg" style={{ background: '#4f46e5' }}>
-                  Explore Student Dashboard
+              <Link to="/auth/choose-role">
+                <Button variant="primary" size="lg" style={{ minWidth: '180px' }}>
+                  Get Started
                   <ArrowRight size={18} />
                 </Button>
               </Link>
-              <Link to="/staff">
-                <Button variant="secondary" size="lg" style={{ background: 'rgba(255, 255, 255, 0.12)', color: '#ffffff', border: '1px solid rgba(255, 255, 255, 0.25)' }}>
-                  Staff Counter Console
+              <a href="#services-preview">
+                <Button variant="secondary" size="lg" style={{ minWidth: '180px' }}>
+                  Explore Services
                 </Button>
-              </Link>
+              </a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Feature Highlights Grid */}
-      <section style={{ padding: '3.5rem 0', background: '#ffffff', borderBottom: '1px solid var(--navy-200)' }}>
+      {/* Minimal Clean Services Preview */}
+      <section id="services-preview" style={{ padding: '3.5rem 0 5rem' }}>
         <div className="container">
           <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: '2rem'
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-end',
+            marginBottom: '2.25rem',
+            flexWrap: 'wrap',
+            gap: '1rem',
+            borderBottom: '1.5px solid var(--border-glass)',
+            paddingBottom: '1.25rem'
           }}>
-            <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
-              <div style={{ background: 'var(--primary-50)', padding: '0.85rem', borderRadius: 'var(--radius-lg)', color: 'var(--primary-700)' }}>
-                <Clock size={28} />
-              </div>
-              <div>
-                <h3 style={{ fontSize: '1.15rem', marginBottom: '0.35rem' }}>Dynamic Wait Time Estimates</h3>
-                <p style={{ fontSize: '0.875rem', color: 'var(--navy-600)', lineHeight: 1.5 }}>
-                  Know exactly how many students are ahead and your estimated turnaround time before walking over.
-                </p>
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
-              <div style={{ background: 'var(--warning-50)', padding: '0.85rem', borderRadius: 'var(--radius-lg)', color: 'var(--warning-700)' }}>
-                <Zap size={28} />
-              </div>
-              <div>
-                <h3 style={{ fontSize: '1.15rem', marginBottom: '0.35rem' }}>Zero Duplicate Token Guarantee</h3>
-                <p style={{ fontSize: '0.875rem', color: 'var(--navy-600)', lineHeight: 1.5 }}>
-                  Powered by atomic PostgreSQL transactions and row-level locks to guarantee sequential numbers without race conditions.
-                </p>
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
-              <div style={{ background: 'var(--success-50)', padding: '0.85rem', borderRadius: 'var(--radius-lg)', color: 'var(--success-700)' }}>
-                <ShieldCheck size={28} />
-              </div>
-              <div>
-                <h3 style={{ fontSize: '1.15rem', marginBottom: '0.35rem' }}>Audited Counter Operations</h3>
-                <p style={{ fontSize: '0.875rem', color: 'var(--navy-600)', lineHeight: 1.5 }}>
-                  Staff manage queues with single-click actions (Call Next, Start, Complete, Skip) backed by immutable transition records.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Available Services Section */}
-      <section style={{ padding: '4rem 0' }}>
-        <div className="container">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
             <div>
-              <span style={{ fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--primary-700)', letterSpacing: '0.05em' }}>
-                Active Campus Counters
+              <span style={{ fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--accent-cyan)', letterSpacing: '0.05em' }}>
+                Active Service Counters
               </span>
-              <h2 style={{ fontSize: '2rem', color: 'var(--navy-950)' }}>
-                Select a Service & Join the Queue
+              <h2 style={{ fontSize: '2rem', color: 'var(--text-primary)', marginTop: '0.25rem' }}>
+                Live Campus Counters
               </h2>
             </div>
-            <Link to="/student" style={{ fontSize: '0.95rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-              View Student Dashboard <ArrowRight size={16} />
+            <Link
+              to="/auth/choose-role"
+              style={{
+                fontSize: '0.925rem',
+                fontWeight: 700,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                color: 'var(--accent-cyan)'
+              }}
+            >
+              Sign In to Enter Queue <ArrowUpRight size={17} />
             </Link>
           </div>
 
           <div className="grid-cols-3">
             {services.map((service) => (
-              <ServiceCard
-                key={service.id}
-                service={service}
-                onJoin={handleJoin}
-                hasActiveToken={activeToken && activeToken.service_id === service.id}
-                isJoining={joiningId === service.id}
-              />
+              <div key={service.id} className="card" style={{ display: 'flex', flexDirection: 'column' }}>
+                <div className="card-header">
+                  <span style={{
+                    fontSize: '0.725rem',
+                    fontWeight: 800,
+                    color: 'var(--accent-purple)',
+                    background: 'rgba(124, 58, 237, 0.15)',
+                    border: '1px solid rgba(168, 85, 247, 0.3)',
+                    padding: '0.25rem 0.65rem',
+                    borderRadius: 'var(--radius-xs)',
+                    textTransform: 'uppercase'
+                  }}>
+                    {service.department || 'Campus Service'}
+                  </span>
+                  <Badge
+                    status={service.is_active ? 'active' : 'closed'}
+                    label={service.is_active ? 'Open' : 'Paused'}
+                  />
+                </div>
+
+                <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>
+                  {service.name}
+                </h3>
+
+                <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '1.5rem', flex: 1, lineHeight: 1.55 }}>
+                  {service.description}
+                </p>
+
+                {/* Queue Stats Pill */}
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  gap: '0.75rem',
+                  padding: '0.85rem',
+                  background: 'rgba(11, 18, 33, 0.8)',
+                  border: '1px solid var(--border-glass)',
+                  borderRadius: 'var(--radius-md)',
+                  marginBottom: '1.25rem'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <Users size={18} color="var(--accent-cyan)" />
+                    <div>
+                      <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase' }}>Waiting</div>
+                      <div style={{ fontSize: '0.95rem', fontWeight: 800, color: 'var(--text-primary)' }}>
+                        {service.waiting_count || 0} in queue
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <Clock size={18} color="var(--accent-purple)" />
+                    <div>
+                      <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase' }}>Est. Wait</div>
+                      <div style={{ fontSize: '0.95rem', fontWeight: 800, color: 'var(--text-primary)' }}>
+                        ~{(service.waiting_count || 0) * (service.avg_service_time_mins || 4)} mins
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <Button
+                  variant="primary"
+                  onClick={() => handleServiceClick(service.id)}
+                  disabled={!service.is_active}
+                  style={{ width: '100%' }}
+                >
+                  {service.is_active ? 'Get Digital Token' : 'Counter Paused'}
+                  <ArrowRight size={16} />
+                </Button>
+              </div>
             ))}
           </div>
         </div>

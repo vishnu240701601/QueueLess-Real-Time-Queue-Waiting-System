@@ -1,50 +1,57 @@
 import React from 'react';
-import { Layers, ShieldCheck, Clock, Zap } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Layers } from 'lucide-react';
 
 export default function Footer() {
   return (
     <footer style={{
-      background: '#ffffff',
-      borderTop: '1px solid var(--navy-200)',
-      padding: '2.5rem 0 1.5rem',
+      background: 'rgba(8, 12, 22, 0.95)',
+      borderTop: '1px solid var(--border-glass)',
+      padding: '2.5rem 0 2rem',
       marginTop: 'auto'
     }}>
       <div className="container">
         <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-          gap: '2rem',
-          marginBottom: '2rem'
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          gap: '1.5rem',
+          paddingBottom: '1.5rem',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.08)'
         }}>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
-              <Layers size={22} color="var(--primary-700)" />
-              <span style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--navy-950)' }}>QueueLess</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+            <div style={{
+              background: 'linear-gradient(135deg, var(--accent-purple), #9333ea)',
+              color: '#ffffff',
+              width: '32px',
+              height: '32px',
+              borderRadius: 'var(--radius-sm)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: 'var(--shadow-brutal-sm)'
+            }}>
+              <Layers size={18} />
             </div>
-            <p style={{ fontSize: '0.875rem', color: 'var(--navy-600)', lineHeight: 1.6 }}>
-              A real-time digital queuing solution built for college canteens, administrative offices, photocopy centers, and service counters.
-            </p>
+            <div>
+              <span style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
+                Queue<span style={{ color: 'var(--accent-cyan)' }}>Less</span>
+              </span>
+              <span style={{ display: 'block', fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                Real-Time Campus Queuing System
+              </span>
+            </div>
           </div>
 
-          <div>
-            <h4 style={{ fontSize: '0.95rem', fontWeight: 700, marginBottom: '0.75rem', color: 'var(--navy-900)' }}>Key Highlights</h4>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '0.85rem', color: 'var(--navy-700)', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              <li style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}><Clock size={16} color="var(--primary-600)" /> Real-Time Wait Estimates</li>
-              <li style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}><Zap size={16} color="var(--warning-600)" /> Zero Duplicate Token Guarantee</li>
-              <li style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}><ShieldCheck size={16} color="var(--success-600)" /> Role-Based Access Control</li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 style={{ fontSize: '0.95rem', fontWeight: 700, marginBottom: '0.75rem', color: 'var(--navy-900)' }}>Architecture & Deployment</h4>
-            <p style={{ fontSize: '0.85rem', color: 'var(--navy-600)', lineHeight: 1.6 }}>
-              Frontend deployed on <strong>Netlify</strong>. Backend powered by <strong>Vercel Serverless Express</strong> and <strong>Supabase PostgreSQL</strong> with atomic RPC stored procedures.
-            </p>
+          <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', fontSize: '0.875rem' }}>
+            <Link to="/" style={{ color: 'var(--text-muted)' }}>Home</Link>
+            <Link to="/auth/choose-role" style={{ color: 'var(--text-muted)' }}>Sign In</Link>
+            <Link to="/auth/choose-role" style={{ color: 'var(--accent-cyan)', fontWeight: 700 }}>Get Started</Link>
           </div>
         </div>
 
         <div style={{
-          borderTop: '1px solid var(--navy-100)',
           paddingTop: '1.25rem',
           display: 'flex',
           flexWrap: 'wrap',
@@ -52,15 +59,13 @@ export default function Footer() {
           alignItems: 'center',
           gap: '1rem',
           fontSize: '0.8rem',
-          color: 'var(--navy-500)'
+          color: 'var(--text-muted)'
         }}>
-          <div>&copy; {new Date().getFullYear()} QueueLess – Real-Time Queue Waiting System. All rights reserved.</div>
-          <div style={{ display: 'flex', gap: '1rem' }}>
-            <span>Netlify SPA</span>
+          <div>&copy; {new Date().getFullYear()} QueueLess. Fast, reliable digital queue management.</div>
+          <div style={{ display: 'flex', gap: '1rem', color: 'var(--text-muted)' }}>
+            <span>Campus Edition</span>
             <span>•</span>
-            <span>Supabase Realtime</span>
-            <span>•</span>
-            <span>Vercel Edge</span>
+            <span>Protected Access</span>
           </div>
         </div>
       </div>

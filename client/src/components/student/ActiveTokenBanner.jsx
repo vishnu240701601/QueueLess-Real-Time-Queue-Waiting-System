@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'lucide-react';
-import { Clock, Users, ArrowRight, XCircle, AlertCircle, Sparkles } from 'lucide-react';
+import { Clock, Users, XCircle, AlertCircle, Sparkles, BellRing } from 'lucide-react';
 import Badge from '../common/Badge';
 import Button from '../common/Button';
 import Modal from '../common/Modal';
@@ -21,97 +20,113 @@ export default function ActiveTokenBanner({ token, onCancel }) {
     }
   };
 
+  const isCalled = token.status === 'called';
+  const isServing = token.status === 'serving';
+
   // Determine stage index
   const stages = ['waiting', 'called', 'serving', 'completed'];
   const currentStageIndex = stages.indexOf(token.status) !== -1 ? stages.indexOf(token.status) : 0;
 
   return (
     <div className="card" style={{
-      background: 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
-      border: '2px solid var(--primary-500)',
+      background: 'rgba(15, 23, 42, 0.9)',
+      border: isCalled ? '2px solid var(--accent-cyan)' : '2px solid var(--accent-purple)',
+      boxShadow: isCalled ? 'var(--shadow-brutal-cyan)' : 'var(--shadow-brutal-purple)',
       position: 'relative',
       overflow: 'hidden',
-      marginBottom: '2rem'
+      marginBottom: '2.5rem'
     }}>
-      {/* Top accent banner */}
-      <div style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        height: '4px',
-        background: 'linear-gradient(90deg, var(--primary-600), var(--warning-500), var(--success-500))'
-      }} />
+      {/* Animated Call Alert Ribbon */}
+      {isCalled && (
+        <div style={{
+          background: 'linear-gradient(90deg, var(--accent-cyan), #0284c7)',
+          color: '#080c16',
+          padding: '0.65rem 1.25rem',
+          margin: '-1.75rem -1.75rem 1.25rem -1.75rem',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '0.5rem',
+          fontWeight: 800,
+          fontSize: '0.925rem',
+          textTransform: 'uppercase',
+          letterSpacing: '0.04em'
+        }}>
+          <BellRing size={20} className="pulse-dot" />
+          <span>Your token is being called right now! Proceed immediately to the counter.</span>
+        </div>
+      )}
 
       <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem', marginBottom: '1.25rem' }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.35rem' }}>
-            <span style={{ fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--primary-700)' }}>
+            <span style={{ fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--accent-purple)' }}>
               Active Queue Ticket
             </span>
             <Badge status={token.status} />
           </div>
-          <h2 style={{ fontSize: '1.6rem', color: 'var(--navy-950)' }}>{token.serviceName}</h2>
-          <p style={{ fontSize: '0.875rem', color: 'var(--navy-600)' }}>{token.department}</p>
+          <h2 style={{ fontSize: '1.75rem', color: 'var(--text-primary)' }}>{token.serviceName}</h2>
+          <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{token.department || 'Campus Counter'}</p>
         </div>
 
         <div style={{
           textAlign: 'right',
-          background: 'var(--primary-50)',
-          border: '1px solid var(--primary-100)',
-          borderRadius: 'var(--radius-lg)',
-          padding: '0.65rem 1.25rem'
+          background: 'rgba(124, 58, 237, 0.15)',
+          border: '2px solid var(--accent-purple)',
+          borderRadius: 'var(--radius-md)',
+          padding: '0.65rem 1.25rem',
+          boxShadow: 'var(--shadow-brutal-sm)'
         }}>
-          <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--primary-700)', textTransform: 'uppercase' }}>Your Token</span>
-          <div style={{ fontSize: '2.25rem', fontFamily: 'var(--font-display)', fontWeight: 800, color: 'var(--primary-900)', lineHeight: 1 }}>
+          <span style={{ fontSize: '0.7rem', fontWeight: 800, color: '#c084fc', textTransform: 'uppercase' }}>Your Token</span>
+          <div style={{ fontSize: '2.25rem', fontFamily: 'var(--font-display)', fontWeight: 900, color: 'var(--text-primary)', lineHeight: 1 }}>
             {token.display_number || `#${token.token_number}`}
           </div>
         </div>
       </div>
 
-      {/* Live Metrics Grid */}
+      {/* Live Metrics Strip */}
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
         gap: '1rem',
-        background: '#ffffff',
-        border: '1px solid var(--navy-200)',
+        background: 'rgba(11, 18, 33, 0.85)',
+        border: '1.5px solid var(--border-glass)',
         borderRadius: 'var(--radius-md)',
-        padding: '1rem',
+        padding: '1.15rem',
         marginBottom: '1.5rem'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <div style={{ background: 'var(--warning-50)', color: 'var(--warning-700)', padding: '0.6rem', borderRadius: 'var(--radius-md)' }}>
+          <div style={{ background: 'rgba(245, 158, 11, 0.15)', color: '#fbbf24', padding: '0.6rem', borderRadius: 'var(--radius-md)', border: '1px solid rgba(245, 158, 11, 0.3)' }}>
             <Users size={22} />
           </div>
           <div>
-            <div style={{ fontSize: '0.8rem', color: 'var(--navy-600)' }}>People Ahead of You</div>
-            <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--navy-900)' }}>
-              {token.totalAhead} {token.totalAhead === 1 ? 'person' : 'people'}
+            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase' }}>People Ahead</div>
+            <div style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--text-primary)' }}>
+              {token.totalAhead ?? (token.peopleAhead || 0)} {token.totalAhead === 1 ? 'student' : 'students'}
             </div>
           </div>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <div style={{ background: 'var(--info-50)', color: 'var(--info-700)', padding: '0.6rem', borderRadius: 'var(--radius-md)' }}>
+          <div style={{ background: 'rgba(2, 132, 199, 0.15)', color: 'var(--accent-cyan)', padding: '0.6rem', borderRadius: 'var(--radius-md)', border: '1px solid rgba(2, 132, 199, 0.3)' }}>
             <Clock size={22} />
           </div>
           <div>
-            <div style={{ fontSize: '0.8rem', color: 'var(--navy-600)' }}>Estimated Wait Time</div>
-            <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--navy-900)' }}>
-              ~{token.estWaitMins} mins
+            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase' }}>Estimated Wait</div>
+            <div style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--accent-cyan)' }}>
+              ~{token.estWaitMins || 4} mins
             </div>
           </div>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <div style={{ background: 'var(--success-50)', color: 'var(--success-700)', padding: '0.6rem', borderRadius: 'var(--radius-md)' }}>
+          <div style={{ background: 'rgba(16, 185, 129, 0.15)', color: '#34d399', padding: '0.6rem', borderRadius: 'var(--radius-md)', border: '1px solid rgba(16, 185, 129, 0.3)' }}>
             <Sparkles size={22} />
           </div>
           <div>
-            <div style={{ fontSize: '0.8rem', color: 'var(--navy-600)' }}>Currently Serving</div>
-            <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--success-700)' }}>
-              Token #{token.token_number - token.totalAhead > 0 ? token.token_number - token.totalAhead : 'Waiting'}
+            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase' }}>Queue Progress</div>
+            <div style={{ fontSize: '1.35rem', fontWeight: 800, color: isServing ? 'var(--color-success)' : isCalled ? 'var(--accent-cyan)' : 'var(--text-primary)', textTransform: 'capitalize' }}>
+              {token.status}
             </div>
           </div>
         </div>
@@ -119,17 +134,17 @@ export default function ActiveTokenBanner({ token, onCancel }) {
 
       {/* Progress Stepper */}
       <div style={{ marginBottom: '1.5rem' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.8rem', fontWeight: 600, color: 'var(--navy-700)' }}>
-          <span style={{ color: currentStageIndex >= 0 ? 'var(--primary-700)' : 'inherit' }}>1. In Queue</span>
-          <span style={{ color: currentStageIndex >= 1 ? 'var(--primary-700)' : 'inherit' }}>2. Called to Counter</span>
-          <span style={{ color: currentStageIndex >= 2 ? 'var(--primary-700)' : 'inherit' }}>3. Being Served</span>
-          <span style={{ color: currentStageIndex >= 3 ? 'var(--success-700)' : 'inherit' }}>4. Completed</span>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.78rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+          <span style={{ color: currentStageIndex >= 0 ? 'var(--accent-cyan)' : 'var(--text-muted)' }}>1. In Queue</span>
+          <span style={{ color: currentStageIndex >= 1 ? 'var(--accent-cyan)' : 'var(--text-muted)' }}>2. Called to Counter</span>
+          <span style={{ color: currentStageIndex >= 2 ? 'var(--color-success)' : 'var(--text-muted)' }}>3. Being Served</span>
+          <span style={{ color: currentStageIndex >= 3 ? 'var(--color-success)' : 'var(--text-muted)' }}>4. Completed</span>
         </div>
-        <div style={{ height: '8px', background: 'var(--navy-200)', borderRadius: 'var(--radius-full)', overflow: 'hidden' }}>
+        <div style={{ height: '8px', background: 'rgba(255, 255, 255, 0.08)', borderRadius: 'var(--radius-full)', overflow: 'hidden' }}>
           <div style={{
             height: '100%',
             width: `${((currentStageIndex + 1) / 4) * 100}%`,
-            background: 'linear-gradient(90deg, var(--primary-600), var(--success-600))',
+            background: 'linear-gradient(90deg, var(--accent-purple), var(--accent-cyan))',
             borderRadius: 'var(--radius-full)',
             transition: 'width 0.4s ease'
           }} />
@@ -138,18 +153,19 @@ export default function ActiveTokenBanner({ token, onCancel }) {
 
       {/* Actions */}
       <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '0.75rem' }}>
-        <div style={{ fontSize: '0.825rem', color: 'var(--navy-600)', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-          <span className="pulse-dot" style={{ backgroundColor: 'var(--success-600)' }} />
-          <span>Real-time live queue sync active</span>
+        <div style={{ fontSize: '0.825rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+          <span className="pulse-dot" style={{ backgroundColor: 'var(--accent-cyan)' }} />
+          <span>Real-time queue synchronization active</span>
         </div>
-        <div style={{ display: 'flex', gap: '0.75rem' }}>
+        <div>
           <Button
             variant="outline-danger"
             size="sm"
             icon={XCircle}
             onClick={() => setCancelModalOpen(true)}
+            disabled={token.status === 'serving' || token.status === 'completed'}
           >
-            Cancel Token
+            Cancel My Token
           </Button>
         </div>
       </div>
@@ -161,17 +177,17 @@ export default function ActiveTokenBanner({ token, onCancel }) {
         title="Cancel Your Queue Token?"
       >
         <div style={{ textAlign: 'center', padding: '0.5rem 0 1.25rem' }}>
-          <AlertCircle size={44} color="var(--danger-600)" style={{ margin: '0 auto 0.75rem' }} />
-          <p style={{ fontSize: '0.95rem', color: 'var(--navy-800)', marginBottom: '0.5rem' }}>
-            Are you sure you want to give up your spot in line for <strong>{token.serviceName}</strong>?
+          <AlertCircle size={44} color="var(--color-danger)" style={{ margin: '0 auto 0.75rem' }} />
+          <p style={{ fontSize: '1rem', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
+            Are you sure you want to cancel token <strong>#{token.display_number || token.token_number}</strong>?
           </p>
-          <p style={{ fontSize: '0.825rem', color: 'var(--navy-600)' }}>
-            Your token number <strong>{token.display_number}</strong> will be permanently released.
+          <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+            Surrendering your token releases your spot in the queue for {token.serviceName}.
           </p>
         </div>
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem' }}>
           <Button variant="secondary" onClick={() => setCancelModalOpen(false)}>
-            Keep My Token
+            Keep My Place
           </Button>
           <Button variant="danger" loading={cancelling} onClick={handleConfirmCancel}>
             Yes, Cancel Token

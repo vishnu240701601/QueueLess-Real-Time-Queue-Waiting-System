@@ -1,9 +1,9 @@
 import React from 'react';
 import Badge from '../common/Badge';
 import EmptyState from '../common/EmptyState';
-import { Users, Clock, AlertCircle } from 'lucide-react';
+import { Users, Clock } from 'lucide-react';
 
-export default function WaitingQueueTable({ queue = [], onSkip }) {
+export default function WaitingQueueTable({ queue = [] }) {
   const waitingTokens = queue.filter(t => t.status === 'waiting');
 
   if (waitingTokens.length === 0) {
@@ -11,7 +11,7 @@ export default function WaitingQueueTable({ queue = [], onSkip }) {
       <EmptyState
         icon={Users}
         title="Queue is currently empty"
-        description="No students are waiting in line for this counter right now. When students join, their tokens will appear here in chronological FIFO order."
+        description="No students are waiting in line for this counter right now. When students generate a token, their entries will appear here in chronological FIFO order."
       />
     );
   }
@@ -21,7 +21,7 @@ export default function WaitingQueueTable({ queue = [], onSkip }) {
       <table className="table">
         <thead>
           <tr>
-            <th style={{ width: '80px' }}>Pos.</th>
+            <th style={{ width: '80px' }}>FIFO Pos.</th>
             <th>Token</th>
             <th>Visitor Name</th>
             <th>Waiting Since</th>
@@ -33,28 +33,29 @@ export default function WaitingQueueTable({ queue = [], onSkip }) {
             const waitTimeMin = Math.round((Date.now() - new Date(token.created_at).getTime()) / 60000);
             return (
               <tr key={token.id}>
-                <td style={{ fontWeight: 700, color: 'var(--navy-500)' }}>
+                <td style={{ fontWeight: 800, color: 'var(--accent-cyan)' }}>
                   #{index + 1}
                 </td>
                 <td>
                   <strong style={{
                     fontFamily: 'var(--font-display)',
                     fontSize: '1.05rem',
-                    color: 'var(--primary-800)',
-                    background: 'var(--primary-50)',
-                    padding: '0.2rem 0.6rem',
-                    borderRadius: 'var(--radius-sm)'
+                    color: 'var(--accent-cyan)',
+                    background: 'rgba(6, 182, 212, 0.12)',
+                    border: '1px solid rgba(6, 182, 212, 0.3)',
+                    padding: '0.2rem 0.65rem',
+                    borderRadius: 'var(--radius-xs)'
                   }}>
                     {token.display_number || `#${token.token_number}`}
                   </strong>
                 </td>
-                <td style={{ fontWeight: 600, color: 'var(--navy-900)' }}>
+                <td style={{ fontWeight: 600, color: 'var(--text-primary)' }}>
                   {token.user_name || 'Student Visitor'}
                 </td>
-                <td style={{ color: 'var(--navy-600)', fontSize: '0.85rem' }}>
+                <td style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
                   <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
                     <Clock size={14} />
-                    {waitTimeMin} {waitTimeMin === 1 ? 'min' : 'mins'} ago
+                    {waitTimeMin > 0 ? `${waitTimeMin} mins ago` : 'Just now'}
                   </span>
                 </td>
                 <td>
