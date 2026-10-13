@@ -18,35 +18,25 @@ export default function AdminAnalyticsPage() {
   return (
     <div className="container" style={{ maxWidth: '1080px', paddingTop: '1.5rem', paddingBottom: '4rem' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-        <Link to="/admin/dashboard" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-          <ArrowLeft size={16} /> Back to Administrator Console
+        <Link to="/admin/dashboard" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.875rem', color: 'var(--text-muted)' }}>
+          <ArrowLeft size={16} /> Back to Dashboard
         </Link>
-        <Link to="/admin/history" style={{ fontSize: '0.85rem', color: 'var(--accent-cyan)', fontWeight: 700 }}>
-          View Audit History &rarr;
+        <Link to="/admin/history" style={{ fontSize: '0.875rem', color: 'var(--primary)', fontWeight: 600 }}>
+          View History &rarr;
         </Link>
       </div>
 
       <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
-        flexWrap: 'wrap',
-        gap: '1rem',
-        marginBottom: '2.5rem',
-        paddingBottom: '1.5rem',
-        borderBottom: '1.5px solid var(--border-glass)'
+        marginBottom: '2rem',
+        paddingBottom: '1rem',
+        borderBottom: '1px solid var(--border)'
       }}>
-        <div>
-          <span style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--accent-cyan)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-            Campus Performance Intelligence
-          </span>
-          <h1 style={{ fontSize: '2.5rem', marginTop: '0.2rem', marginBottom: '0.35rem' }}>
-            Queue Analytics & Throughput
-          </h1>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '1rem' }}>
-            Aggregated operational metrics, service velocity, and counter efficiency.
-          </p>
-        </div>
+        <h1 style={{ fontSize: '1.75rem', marginBottom: '0.35rem' }}>
+          Queue Analytics & Throughput
+        </h1>
+        <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>
+          Overview of campus counter throughput, wait times, and queue volume.
+        </p>
       </div>
 
       {/* KPI Cards */}
@@ -100,7 +90,7 @@ export default function AdminAnalyticsPage() {
             <h2 style={{ fontSize: '1.45rem' }}>Service Counter Breakdown</h2>
             <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Throughput and turnaround by department</p>
           </div>
-          <span style={{ fontSize: '0.85rem', color: 'var(--accent-cyan)', fontWeight: 700 }}>
+          <span style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>
             {services.length} Counters Tracked
           </span>
         </div>
@@ -123,19 +113,19 @@ export default function AdminAnalyticsPage() {
                 return (
                   <tr key={s.id}>
                     <td>
-                      <strong style={{ color: 'var(--text-primary)' }}>{s.name}</strong>
+                      <strong>{s.name}</strong>
                       <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Prefix: {s.token_prefix}</div>
                     </td>
                     <td style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{s.department}</td>
                     <td>
-                      <strong style={{ color: 'var(--accent-cyan)', fontSize: '1rem' }}>
+                      <strong style={{ fontSize: '1rem' }}>
                         {s.waiting_count || 0}
                       </strong>
                     </td>
-                    <td style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                    <td style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
                       {totalVol} tokens
                     </td>
-                    <td style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                    <td style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
                       ~{s.avg_service_time_mins || 4} mins / student
                     </td>
                     <td>

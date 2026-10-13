@@ -14,7 +14,7 @@ export default function EmptyState({
       <div className="empty-state-icon">
         <Icon size={48} strokeWidth={1.5} />
       </div>
-      <h3 style={{ fontSize: '1.15rem', color: 'var(--navy-900)', marginBottom: '0.4rem' }}>{title}</h3>
+      <h3 style={{ fontSize: '1.15rem', marginBottom: '0.4rem' }}>{title}</h3>
       <p style={{ fontSize: '0.9rem', maxWidth: '380px', margin: '0 auto 1.25rem' }}>{description}</p>
       {actionLabel && onAction && (
         <Button variant="secondary" onClick={onAction}>

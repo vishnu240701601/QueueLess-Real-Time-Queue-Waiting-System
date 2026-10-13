@@ -49,41 +49,25 @@ export default function TokenLiveStatus() {
           alignItems: 'center',
           gap: '0.4rem',
           color: 'var(--text-muted)',
-          fontWeight: 600,
-          marginBottom: '1.5rem',
-          fontSize: '0.9rem'
+          fontSize: '0.875rem',
+          marginBottom: '1.5rem'
         }}
       >
-        <ArrowLeft size={18} />
+        <ArrowLeft size={16} />
         Back to Student Dashboard
       </Link>
 
-      {/* Digital Ticket Card */}
-      <div className="card" style={{
-        background: 'rgba(15, 23, 42, 0.95)',
-        border: isCalled ? '2px solid var(--accent-cyan)' : '2px solid var(--accent-purple)',
-        boxShadow: isCalled ? 'var(--shadow-brutal-cyan)' : 'var(--shadow-brutal-purple)',
-        padding: '2.25rem 2rem',
-        textAlign: 'center',
-        position: 'relative'
-      }}>
+      <div className="card" style={{ padding: '2rem', textAlign: 'center' }}>
         {isCalled && (
-          <div style={{
-            background: 'linear-gradient(90deg, var(--accent-cyan), #0284c7)',
-            color: '#080c16',
-            padding: '0.65rem 1rem',
-            borderRadius: 'var(--radius-md)',
+          <div className="alert alert-info" style={{
             marginBottom: '1.5rem',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             gap: '0.5rem',
-            fontSize: '0.875rem',
-            fontWeight: 800,
-            textTransform: 'uppercase',
-            letterSpacing: '0.04em'
+            fontWeight: 700
           }}>
-            <Bell size={18} className="pulse-dot" />
+            <Bell size={18} />
             <span>It's Your Turn! Please Proceed to Counter</span>
           </div>
         )}
@@ -92,53 +76,50 @@ export default function TokenLiveStatus() {
           <Badge status={activeToken.status} />
         </div>
 
-        <span style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--accent-purple)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+        <h2 style={{ fontSize: '1.25rem', marginBottom: '0.25rem' }}>
           {activeToken.serviceName}
-        </span>
+        </h2>
+        <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>
+          {activeToken.department || 'Campus Service Counter'}
+        </p>
 
         {/* Big Token Number Display */}
         <div style={{
-          fontSize: '3.75rem',
-          fontFamily: 'var(--font-display)',
-          fontWeight: 900,
-          color: 'var(--accent-cyan)',
-          letterSpacing: '-0.02em',
-          margin: '0.25rem 0 0.5rem',
+          fontSize: '3rem',
+          fontWeight: 700,
+          color: 'var(--primary)',
+          margin: '0.5rem 0',
           lineHeight: 1
         }}>
           {activeToken.display_number || `#${activeToken.token_number}`}
         </div>
 
-        <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '1.75rem' }}>
-          Issued to: <strong style={{ color: 'var(--text-primary)' }}>{activeToken.user_name || 'Student'}</strong>
+        <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>
+          Issued to: <strong>{activeToken.user_name || 'Student'}</strong>
         </p>
 
         {/* Queue Metrics Pill */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
-          gap: '1rem',
-          background: 'rgba(11, 18, 33, 0.85)',
-          border: '1.5px solid var(--border-glass)',
-          borderRadius: 'var(--radius-md)',
-          padding: '1.25rem',
-          marginBottom: '2rem'
+          gap: '0.75rem',
+          marginBottom: '1.75rem'
         }}>
-          <div>
-            <div style={{ fontSize: '0.725rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.25rem' }}>
+          <div className="surface-box" style={{ padding: '0.75rem', textAlign: 'center' }}>
+            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600, marginBottom: '0.25rem' }}>
               People Ahead
             </div>
-            <div style={{ fontSize: '1.65rem', fontWeight: 900, color: 'var(--text-primary)' }}>
+            <div style={{ fontSize: '1.5rem', fontWeight: 700 }}>
               {activeToken.totalAhead ?? (activeToken.peopleAhead || 0)}
             </div>
           </div>
 
-          <div>
-            <div style={{ fontSize: '0.725rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.25rem' }}>
+          <div className="surface-box" style={{ padding: '0.75rem', textAlign: 'center' }}>
+            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600, marginBottom: '0.25rem' }}>
               Est. Wait Time
             </div>
-            <div style={{ fontSize: '1.65rem', fontWeight: 900, color: '#fbbf24' }}>
-              ~{activeToken.estWaitMins || 4}m
+            <div style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--warning)' }}>
+              ~{activeToken.estWaitMins || 4} min
             </div>
           </div>
         </div>
@@ -152,7 +133,7 @@ export default function TokenLiveStatus() {
           disabled={activeToken.status === 'serving' || activeToken.status === 'completed'}
           style={{ width: '100%' }}
         >
-          Surrender / Cancel Token
+          Cancel Token
         </Button>
       </div>
 
@@ -160,20 +141,20 @@ export default function TokenLiveStatus() {
       <Modal
         isOpen={cancelModalOpen}
         onClose={() => setCancelModalOpen(false)}
-        title="Cancel Your Queue Token?"
+        title="Cancel Queue Token"
       >
         <div style={{ textAlign: 'center', padding: '0.5rem 0 1.25rem' }}>
-          <AlertCircle size={44} color="var(--color-danger)" style={{ margin: '0 auto 0.75rem' }} />
-          <p style={{ fontSize: '1rem', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
+          <AlertCircle size={40} color="var(--danger)" style={{ margin: '0 auto 0.75rem' }} />
+          <p style={{ fontSize: '0.95rem', marginBottom: '0.5rem' }}>
             Are you sure you want to cancel token <strong>#{activeToken.display_number || activeToken.token_number}</strong>?
           </p>
           <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-            This will release your position in the line.
+            This will release your position in line.
           </p>
         </div>
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem' }}>
-          <Button variant="secondary" onClick={() => setCancelModalOpen(false)}>Keep My Place</Button>
-          <Button variant="danger" loading={cancelling} onClick={handleConfirmCancel}>Yes, Cancel Token</Button>
+          <Button variant="secondary" onClick={() => setCancelModalOpen(false)}>Keep Token</Button>
+          <Button variant="danger" loading={cancelling} onClick={handleConfirmCancel}>Yes, Cancel</Button>
         </div>
       </Modal>
     </div>

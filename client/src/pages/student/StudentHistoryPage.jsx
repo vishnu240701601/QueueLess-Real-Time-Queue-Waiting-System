@@ -1,29 +1,21 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useQueue } from '../../context/QueueContext';
-import { History, ArrowLeft, Clock } from 'lucide-react';
 import Badge from '../../components/common/Badge';
 
 export default function StudentHistoryPage() {
   const { history } = useQueue();
 
   return (
-    <div className="container" style={{ maxWidth: '960px', paddingTop: '1.5rem', paddingBottom: '4rem' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-        <Link to="/student/dashboard" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-          <ArrowLeft size={16} /> Back to Student Dashboard
-        </Link>
-      </div>
+    <div className="container" style={{ paddingTop: '1rem', paddingBottom: '3rem' }}>
+      <p style={{ marginBottom: '1rem', fontSize: '0.875rem' }}>
+        <Link to="/student/dashboard">&larr; Back to Dashboard</Link>
+      </p>
 
-      <div style={{ marginBottom: '2.5rem' }}>
-        <span style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--color-success)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-          Personal Activity Log
-        </span>
-        <h1 style={{ fontSize: '2.25rem', marginTop: '0.2rem', marginBottom: '0.5rem' }}>
-          My Token History
-        </h1>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '1rem' }}>
-          A historical log of your completed, cancelled, and past queue tokens.
+      <div className="page-header">
+        <h1>My Token History</h1>
+        <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+          A record of your completed, cancelled, and past queue tokens.
         </p>
       </div>
 
@@ -33,38 +25,32 @@ export default function StudentHistoryPage() {
             <tr>
               <th>Token #</th>
               <th>Service Counter</th>
-              <th>Date & Time</th>
-              <th>Wait Duration</th>
+              <th>Date &amp; Time</th>
+              <th>Wait</th>
               <th>Status</th>
-              <th>Details / Reason</th>
+              <th>Notes</th>
             </tr>
           </thead>
           <tbody>
             {history && history.length > 0 ? (
               history.map((item) => (
                 <tr key={item.id}>
-                  <td>
-                    <strong style={{ fontFamily: 'var(--font-display)', color: 'var(--accent-cyan)', fontSize: '1rem' }}>
-                      {item.display_number || `#${item.token_number}`}
-                    </strong>
+                  <td><strong>{item.display_number || `#${item.token_number}`}</strong></td>
+                  <td>{item.service_name}</td>
+                  <td style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>{item.date}</td>
+                  <td style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>
+                    {item.wait_time_mins ? `${item.wait_time_mins} min` : '—'}
                   </td>
-                  <td style={{ fontWeight: 600 }}>{item.service_name}</td>
-                  <td style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{item.date}</td>
+                  <td><Badge status={item.status} /></td>
                   <td style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                    {item.wait_time_mins ? `${item.wait_time_mins} mins` : '—'}
-                  </td>
-                  <td>
-                    <Badge status={item.status} />
-                  </td>
-                  <td style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontStyle: item.reason ? 'italic' : 'normal' }}>
-                    {item.reason || 'Completed at counter'}
+                    {item.reason || '—'}
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="6" style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--text-muted)' }}>
-                  No previous token history records found.
+                <td colSpan={6} style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>
+                  No token history found.
                 </td>
               </tr>
             )}

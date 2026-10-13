@@ -11,51 +11,51 @@ export default function ServiceCard({ service, onJoin, hasActiveToken, isJoining
       <div className="card-header" style={{ marginBottom: '0.75rem' }}>
         <span style={{
           fontSize: '0.75rem',
-          fontWeight: 700,
-          color: 'var(--primary-700)',
-          background: 'var(--primary-50)',
-          padding: '0.2rem 0.6rem',
-          borderRadius: 'var(--radius-sm)'
+          fontWeight: 600,
+          color: 'var(--primary)',
+          background: 'var(--primary-light)',
+          padding: '0.2rem 0.5rem',
+          border: '1px solid var(--border)'
         }}>
           {service.department}
         </span>
         <Badge status={service.is_active ? 'active' : 'paused'} label={service.is_active ? 'Open' : 'Paused'} />
       </div>
 
-      <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem', color: 'var(--navy-950)' }}>
+      <h3 style={{ fontSize: '1.15rem', marginBottom: '0.35rem' }}>
         {service.name}
       </h3>
 
-      <p style={{ fontSize: '0.875rem', color: 'var(--navy-600)', marginBottom: '1.25rem', flex: 1 }}>
+      <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '1rem', flex: 1 }}>
         {service.description}
       </p>
 
-      {/* Counter Stats Pills */}
+      {/* Counter Stats */}
       <div style={{
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
-        gap: '0.65rem',
-        padding: '0.75rem',
-        background: 'var(--bg-subtle)',
-        borderRadius: 'var(--radius-md)',
-        marginBottom: '1.25rem'
+        gap: '0.5rem',
+        padding: '0.6rem 0.75rem',
+        background: 'var(--surface)',
+        border: '1px solid var(--border)',
+        marginBottom: '1rem'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <Users size={18} color="var(--navy-500)" />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+          <Users size={16} color="var(--text-muted)" />
           <div>
-            <div style={{ fontSize: '0.725rem', color: 'var(--navy-500)', fontWeight: 600 }}>Queue Size</div>
-            <div style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--navy-900)' }}>
+            <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Queue Size</div>
+            <div style={{ fontSize: '0.9rem', fontWeight: 700 }}>
               {service.waiting_count || 0} waiting
             </div>
           </div>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <Clock size={18} color="var(--navy-500)" />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+          <Clock size={16} color="var(--text-muted)" />
           <div>
-            <div style={{ fontSize: '0.725rem', color: 'var(--navy-500)', fontWeight: 600 }}>Est. Wait</div>
-            <div style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--navy-900)' }}>
-              ~{estWait} mins
+            <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Est. Wait</div>
+            <div style={{ fontSize: '0.9rem', fontWeight: 700 }}>
+              ~{estWait} min
             </div>
           </div>
         </div>

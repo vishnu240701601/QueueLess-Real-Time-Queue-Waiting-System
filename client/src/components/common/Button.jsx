@@ -26,12 +26,12 @@ export default function Button({
     >
       {loading ? (
         <>
-          <Loader2 size={16} className="animate-spin" style={{ animation: 'spin 1s linear infinite' }} />
+          <Loader2 size={15} style={{ animation: 'spin 1s linear infinite' }} />
           <span>Processing...</span>
         </>
       ) : (
         <>
-          {Icon && <Icon size={18} />}
+          {Icon && <Icon size={16} />}
           {children}
         </>
       )}
